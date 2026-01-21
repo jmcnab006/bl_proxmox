@@ -35,20 +35,26 @@ bl_proxmox_management:
 bl_proxmox_host_octet: "{{ ansible_host | split('.') | last }}"
 bl_proxmox_interfaces: []
 # Example:
-# oa_proxmox_interfaces:
-#   - name: vmbr0
-#     address: "192.168.1.10/24"
-#     gateway: "192.168.1.1"
-#     members:
-#       - eno1
-#     comment: "backplane virtual switch"
-#   - name: eno1
-#     type: physical
-#     bridge_ports: vmbr0
-#   - name: bond1
-#     type: bond
-#     bridge: vmbr0
-#
+# bl_proxmox_interfaces:
+#  #management
+#  - name: eno5
+#    address: "{{ ansible_host }}"
+#    netmask: 255.255.255.0
+#    gateway: 10.255.255.1
+#    family: inet
+#    method: static
+#    comment: "out of band management network"
+#  - name: eno6
+#  - name: ens7f0
+#  - name: ens7f1
+#  - name: vmk0
+#    method: static
+#    address: "172.16.65.{{ bl_proxmox_host_octet }}/24"
+#    ovs_type: OVSIntPort
+#    ovs_bridge: vmbr0
+#    ovs_options: tag=1065
+#    comment: "pve cluster network"
+
 # Cluster configuration
 bl_proxmox_cluster_name: "pve-cluster"
 bl_proxmox_cluster_key: ""  # Must be provided when joining a cluster
