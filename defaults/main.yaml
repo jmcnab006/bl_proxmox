@@ -14,7 +14,7 @@ bl_proxmox_default_packages:
   - jq
 
 # set our default tld
-bl_proxmox_tld: oa.net
+bl_proxmox_tld: bridgelinetech.com
 
 # if ceph is to be hyperconverged this should be set to true in the group_var
 bl_proxmox_ceph_enabled: false
@@ -31,6 +31,8 @@ bl_proxmox_management:
       #oa_proxmox_management_gateway: "{{ oa_proxmox_management_address | regex_replace('\\.\\d+$', '.1') }}"
 #oa_proxmox_management_cidr: "/24"
 
+# set our last octet to the last octet of the management or ansible host address
+bl_proxmox_host_octet: "{{ ansible_host | split('.') | last }}"
 bl_proxmox_interfaces: []
 # Example:
 # oa_proxmox_interfaces:
