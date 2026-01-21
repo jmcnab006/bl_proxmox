@@ -1,0 +1,59 @@
+# bl_proxmox/tasks/main.yml
+# Main task file for Proxmox cluster configuration
+- name: "Configure repositories"
+  ansible.builtin.include_tasks: "repositories.yaml"
+  tags:
+    - repositories
+    - proxmox
+
+- name: "Update system packages"
+  ansible.builtin.include_tasks: "packages.yaml"
+  tags:
+    - packages
+    - proxmox
+
+- name: "Configure network interfaces"
+  ansible.builtin.include_tasks: "network.yaml"
+  tags:
+    - network
+    - proxmox
+
+      #- name: "Configure repositories"
+      #  ansible.builtin.include_tasks: "repositories.yaml"
+      #  tags:
+      #    - repositories
+      #    - proxmox
+      #
+
+      #
+      #- name: "Configure system hostname"
+      #  ansible.builtin.include_tasks: "hostname.yaml"
+      #  tags:
+      #    - hostname
+      #    - proxmox
+      #
+      #- name: "Configure hosts file"
+      #  ansible.builtin.include_tasks: "hosts.yaml"
+      #  tags:
+      #    - hosts
+      #    - proxmox
+      #
+      #- name: "Configure custom routes"
+      #  ansible.builtin.include_tasks: "routes.yaml"
+      #  tags:
+      #    - routes
+      #    - proxmox
+      #
+      #- name: "Check cluster membership"
+      #  ansible.builtin.include_tasks: "cluster_check.yaml"
+      #  tags:
+      #    - cluster
+      #    - proxmox
+      #
+      #- name: "Join cluster if needed"
+      #  ansible.builtin.include_tasks: "cluster_join.yaml"
+      #  when: not bl_proxmox_is_cluster_member | default(false)
+      #  tags:
+      #    - cluster
+      #    - proxmox
+      #

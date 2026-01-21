@@ -1,0 +1,24 @@
+# bl_proxmox packages.yaml
+#
+- name: PACKAGES | Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+  changed_when: false
+
+# update all packages
+- name: PACKAGES | Upgrade existing packages
+  ansible.builtin.apt:
+    upgrade: dist
+    force_apt_get: yes
+  tags:
+    - update
+    - packages
+  when:
+    - bl_proxmox_apply_updates | bool
+
+- name: PACKAGES | Install server prerequisites
+  ansible.builtin.apt:
+    name: "{{ bl_proxmox_default_packages }}"
+    state: present
+  tags:
+    - packages

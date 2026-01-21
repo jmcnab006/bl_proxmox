@@ -1,0 +1,4 @@
+---
+- name: bl_proxmox reload network
+  command: 'ifreload -a'
+...

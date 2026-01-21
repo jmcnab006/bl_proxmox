@@ -1,0 +1,150 @@
+# licensed not be default so we set this to false
+bl_proxmox_enterprise_license: false
+
+# make the requirement to apply updates false, this would mean that manual flag setting is required for updating a host through
+# the playbook with either the -e oa_proxmox_apply_updates=true or adding it to the group_vars/<group>/vars file
+bl_proxmox_apply_updates: false
+
+bl_proxmox_keyring: /usr/share/keyrings/proxmox-archive-keyring.gpg
+
+bl_proxmox_default_packages:
+  - openvswitch-switch
+  - python3-pexpect
+  - snmpd
+  - jq
+
+# set our default tld
+bl_proxmox_tld: oa.net
+
+# if ceph is to be hyperconverged this should be set to true in the group_var
+bl_proxmox_ceph_enabled: false
+
+# management_gateway should be set in the cluster
+bl_proxmox_management_cidr: ""
+bl_proxmox_management:
+  - name: "{{ ansible_default_ipv4.interface }}"
+    address: "{{ ansible_host }}/24"
+    gateway: "{{ ansible_host | regex_replace('\\.\\d+$', '.1') }}"
+
+      #oa_proxmox_management_interface: "{{ ansible_default_ipv4.interface }}"
+      #oa_proxmox_management_address: "{{ ansible_host }}"
+      #oa_proxmox_management_gateway: "{{ oa_proxmox_management_address | regex_replace('\\.\\d+$', '.1') }}"
+#oa_proxmox_management_cidr: "/24"
+
+bl_proxmox_interfaces: []
+# Example:
+# oa_proxmox_interfaces:
+#   - name: vmbr0
+#     address: "192.168.1.10/24"
+#     gateway: "192.168.1.1"
+#     members:
+#       - eno1
+#     comment: "backplane virtual switch"
+#   - name: eno1
+#     type: physical
+#     bridge_ports: vmbr0
+#   - name: bond1
+#     type: bond
+#     bridge: vmbr0
+#
+# Cluster configuration
+bl_proxmox_cluster_name: "pve-cluster"
+bl_proxmox_cluster_key: ""  # Must be provided when joining a cluster
+bl_proxmox_cluster_nodes: []  # List of all cluster member hostnames/IPs
+# Example:
+# oa_proxmox_cluster_nodes:
+#   - pve-node1
+#   - pve-node2
+#   - pve-node3
+# Management and storage routes
+bl_proxmox_custom_routes: []
+# Example:
+# oa_proxmox_custom_routes:
+#   - destination: "10.0.0.0/24"
+#     gateway: "192.168.1.254"
+#     interface: "vmbr1"
+
+# Package updates
+bl_proxmox_update_packages: false
+bl_proxmox_autostart_services: false
+
+# set our default cidr masks for our vmkernel interface ports
+vmk0_mask: /24
+vmk1_mask: /24
+vmk2_mask: /24
+vmk3_mask: /24
+vmk4_mask: /24
+
+
+
+
+# join_cluster should always be false unless set on the command line to add members to the cluster with -e join_cluster=true
+bl_proxmox_join_cluster: false
+
+# not working do not use
+#apply_subnets: false
+
+# do we run the ssh_keys? this should be a manual run really
+#ssh_keys: false
+
+# run_sdn should always be false unless set on the command line to add members to the cluster with -e run_sdn=true
+#run_sdn: false
+
+bl_proxmox_force_reload: false
+
+#oa_snmp_nvme_monitor: false
+
+# set our default cluster options
+
+# set our cluster "options"
+#cluster_option_tags: ["backup", "critical", "database", "fttx", "gatekeeper", "gis","k8s","proxmox", "ravon", "sniper","template", "testing","usi","utility","web"]
+#cluster_option_crs_ha: "static"
+#cluster_option_crs_ha_rebalance: 1
+#cluster_option_ha_shutdown_policy: "migrate"
+#cluster_option_migration_network: ""
+#cluster_option_migration_type: "secure"
+#cluster_option_tag_style_shape: "dense"
+#cluster_option_tag_style_case_sensitive: 0
+#cluster_option_user_tag: "existing"
+#cluster_option_id_lower: 100
+#cluster_option_id_upper: 1000000
+#
+#
+## set our cluster ad realm for usinternet.com
+#cluster_realm_id: "usinternet.com"
+#cluster_realm_base_dn: "DC=usicorp,DC=usinternet,DC=com"
+#cluster_realm_bind_dn: "CN=_proxmox,OU=service_accounts,DC=usicorp,DC=usinternet,DC=com"
+#cluster_realm_bind_dn_password: "l6+mp{ZAqn$-V9HK0NQz"
+#cluster_realm_case_sensitive: 0
+#cluster_realm_default: 1
+#cluster_realm_domain: "usicorp.usinternet.com"
+#cluster_realm_filter: "(&(objectCategory=person)(objectClass=user)(memberOf:1.2.840.113556.1.4.1941:=CN=proxmox_access,CN=Users,DC=usicorp,DC=usinternet,DC=com)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))"
+#cluster_realm_mode: "ldaps"
+#cluster_realm_port: 636
+#cluster_realm_server1: "216.17.16.100"
+#cluster_realm_server2: "216.17.16.101"
+#cluster_realm_sync_default_options: "remove-vanished=acl;entry,scope=users"
+#cluster_realm_sync_attributes: "email=userPrincipalName"
+#cluster_realm_sync_type: "ad"
+#
+#cluster_roles:
+#  - { roleid: "usi_support", priv: "Datastore.AllocateSpace,Datastore.Audit,Pool.Audit,VM.Audit,VM.Backup,VM.Config.CDROM,VM.Config.Cloudinit,VM.Console,VM.PowerMgmt,VM.Snapshot,VM.Snapshot.Rollback" }
+#  - { roleid: "usi_monitor", priv: "Datastore.Audit,Pool.Audit,VM.Audit,Mapping.Audit,SDN.Audit,Sys.Audit" }
+#
+#cluster_default_pools: ["cluster", "templates", "testing"]
+#cluster_default_groups:
+#  - { name: "usi-admins", members: ["jmcnab@usinternet.com", "jtruitt@usinternet.com", "jkrejci@usinternet.com", "jkrier@usinternet.com", "clubarski@usinternet.com", "rrist@usinternet.com"]}
+#  - { name: "usi-support", members: ["klange@usinternet.com", "tcarter@usinternet.com"]}
+#  - { name: "securence-support", members: ["mmtowa@usinternet.com"]}
+#
+#cluster_default_acl:
+#  - { group: "usi-admins", path: "/", role: "Administrator"}
+#  - { group: "usi-support", path: "/pool", role: "PVEAdmin"}
+#  - { group: "usi-admins", path: "/pool/cluster", role: "Administrator"}
+#
+#cluster_monitor_user: "nagios@pve"
+#cluster_monitor_token: "monitor"
+#cluster_monitor_password: "!u0wUNUIAUvC!mQY0~KJKNdv"
+#
+#cluster_default_ha_groups: ["default", "templates"]
+#
