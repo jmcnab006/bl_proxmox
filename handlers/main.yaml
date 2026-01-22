@@ -8,4 +8,8 @@
     name: 'snmpd'
     state: 'restarted'
 
+- name: Restart bl_proxmox chrony
+  ansible.builtin.service:
+    name: 'chrony'
+    state: 'restarted'
 ...

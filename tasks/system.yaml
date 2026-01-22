@@ -1,0 +1,28 @@
+---
+- name: SYSTEM | Set system hostname
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: SYSTEM | Set timezone to {{ bl_proxmox_timezone }}
+  community.general.timezone:
+    name: "{{ bl_proxmox_timezone }}"
+
+- name: SYSTEM | Save timezone
+  ansible.builtin.copy:
+    dest: /etc/timezone
+    owner: root
+    group: root
+    mode: '0644'
+    content: "{{ bl_proxmox_timezone }}"
+  notify:
+    - "Restart bl_proxmox chrony"
+
+- name: SYSTEM | Set chrony ntp servers to "{{ bl_proxmox_timeserver }}"
+  ansible.builtin.template:
+    src: chrony.conf.j2
+    dest: /etc/chrony/chrony.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - "Restart bl_proxmox chrony"

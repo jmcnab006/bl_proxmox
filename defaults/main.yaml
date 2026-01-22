@@ -97,3 +97,6 @@ bl_proxmox_snmpd_defaults:
   custom: []
 
 bl_proxmox_snmpd_config: "{{ bl_proxmox_snmpd_defaults | ansible.builtin.combine(bl_proxmox_snmpd, recursive=true) }}"
+
+bl_proxmox_timezone: America/Chicago
+bl_proxmox_timeserver: pool.ntp.org

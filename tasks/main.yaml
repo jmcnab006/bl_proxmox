@@ -1,10 +1,18 @@
 # bl_proxmox/tasks/main.yml
 # Main task file for Proxmox cluster configuration
+
+- name: "Setup SYSTEM"
+  ansible.builtin.include_tasks: "system.yaml"
+  tags:
+    - system
+    - proxmox
+
 - name: "Configure repositories"
   ansible.builtin.include_tasks: "repositories.yaml"
   tags:
     - repositories
     - proxmox
+
 
 - name: "Update system packages"
   ansible.builtin.include_tasks: "packages.yaml"
@@ -44,3 +52,4 @@
   tags:
     - snmp
     - proxmox
+

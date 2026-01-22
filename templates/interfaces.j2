@@ -16,3 +16,5 @@ iface {{ iface.name }} {{ iface.family | default('inet')}} {{ iface.method | def
 {% endif %}
 
 {% endfor %}
+
+source /etc/network/interfaces.d/*
