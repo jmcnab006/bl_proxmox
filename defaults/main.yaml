@@ -82,8 +82,8 @@ bl_proxmox_custom_routes: []
 bl_proxmox_force_reload: false
 
 bl_proxmox_snmpd: {}
-bl_prommox_snmpd_defaults:
-  enable: false
+bl_proxmox_snmpd_defaults:
+  enabled: false
   sys_location: "Rack00"
   sys_contact: "Bridgeline Tech <admin@bridgelinetech.com>"
   sys_services: "72"
@@ -96,4 +96,4 @@ bl_prommox_snmpd_defaults:
       access: rocommunity
   custom: []
 
-bl_prommox_snmpd_config: "{{ bl_prommox_snmpd_defaults | ansible.builtin.combine(bl_proxmox_snmpd, recursive=true) }}"
+bl_proxmox_snmpd_config: "{{ bl_proxmox_snmpd_defaults | ansible.builtin.combine(bl_proxmox_snmpd, recursive=true) }}"
