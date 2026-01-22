@@ -4,7 +4,7 @@
 
 # --- COMMUNITY REPO ---
 
-- name: REPO | Enable/Disable Proxmox pve-no-subscription repo
+- name: REPO | Enable/Disable Proxmox pve-no-subscription repo {{ not bl_proxmox_enterprise_license }}
   ansible.builtin.deb822_repository:
     name: proxmox
     enabled: "{{ not bl_proxmox_enterprise_license | bool }}"
@@ -15,7 +15,7 @@
       - pve-no-subscription
     signed_by: "{{ bl_proxmox_keyring }}"
 
-- name: REPO | Enable/Disable ceph-squid no-subscription repo
+- name: REPO | Enable/Disable ceph-squid no-subscription repo {{ not bl_proxmox_enterprise_license }}
   ansible.builtin.deb822_repository:
     name: ceph
     enabled: "{{ not bl_proxmox_enterprise_license | bool }}"
@@ -29,7 +29,7 @@
 
 # --- ENTERPRISE REPO ---
 
-- name: REPO | Enable/Disable Proxmox pve-enterprise repo
+- name: REPO | Enable/Disable Proxmox pve-enterprise repo {{ bl_proxmox_enterprise_license }}
   ansible.builtin.deb822_repository:
     name: pve-enterprise
     enabled: "{{ bl_proxmox_enterprise_license | bool }}"
@@ -39,10 +39,11 @@
     components:
       - pve-enterprise
     signed_by: "{{ bl_proxmox_keyring }}"
+  changed_when: false
 
-- name: REPO | Enable/Disable ceph-squid pve-enterprise repo
+- name: REPO | Enable/Disable ceph-squid pve-enterprise repo {{ bl_proxmox_enterprise_license }}
   ansible.builtin.deb822_repository:
-    name: ceph
+    name: ceph-enterprise
     enabled: "{{ bl_proxmox_enterprise_license | bool }}"
     types: deb
     uris: https://enterprise.proxmox.com/debian/ceph-squid
@@ -50,3 +51,4 @@
     components:
       - pve-enterprise
     signed_by: "{{ bl_proxmox_keyring }}"
+  when: bl_proxmox_ceph_enabled | bool
