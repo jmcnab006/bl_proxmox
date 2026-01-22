@@ -30,3 +30,17 @@
   tags:
     - cluster
     - proxmox
+
+- name: "Install CEPH"
+  when: bl_proxmox_ceph_enabled | bool
+  ansible.builtin.include_tasks: "ceph.yaml"
+  tags:
+    - cluster
+    - proxmox
+
+- name: "Install SNMP"
+  when: bl_proxmox_snmp.enabled | bool
+  ansible.builtin.include_tasks: "snmp.yaml"
+  tags:
+    - snmp
+    - proxmox

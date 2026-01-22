@@ -1,0 +1,18 @@
+{{ ansible_managed | comment }}
+
+sysLocation    {{ bl_prommox_snmpd_config.sys_location }}
+sysContact     {{ bl_prommox_snmpd_config.sys_contact }}
+sysServices    {{ bl_prommox_snmpd_config.sys_services }}
+
+master agentx
+agentaddress  {{ bl_prommox_snmpd_config.loopback | join(',') }},{{ bl_prommox_snmpd_config.listen_addresses | join(',') }}
+
+{% for rule in bl_prommox_snmpd_config.rules  %}
+{{ rule.access }} {{ rule.community }} {{ rule.address }}
+{% endfor %}
+
+{% for config in bl_prommox_snmpd_config.custom  %}
+{{ config }}
+{% endfor %}
+
+includeDir /etc/snmp/snmpd.conf.d

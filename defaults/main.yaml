@@ -9,7 +9,6 @@ bl_proxmox_keyring: /usr/share/keyrings/proxmox-archive-keyring.gpg
 bl_proxmox_packages_default:
   - openvswitch-switch
   - python3-pexpect
-  - snmpd
   - jq
 
 bl_proxmox_packages_add: []
@@ -72,12 +71,29 @@ bl_proxmox_cluster_fingerprint: ""
 bl_proxmox_cluster_master: ""
 bl_proxmox_cluster_nodes: []
 
-# SPECIAL ROUTING
+# SPECIAL ROUTING - Todo
 bl_proxmox_custom_routes: []
 # Example:
-# oa_proxmox_custom_routes:
+# bl_proxmox_custom_routes:
 #   - destination: "10.0.0.0/24"
 #     gateway: "192.168.1.254"
 #     interface: "vmbr1"
 
 bl_proxmox_force_reload: false
+
+bl_proxmox_snmpd: {}
+bl_prommox_snmpd_defaults:
+  enable: false
+  sys_location: "Rack00"
+  sys_contact: "Bridgeline Tech <admin@bridgelinetech.com>"
+  sys_services: "72"
+  loopback: 127.0.0.1
+  listen_addresses:
+    - "{{ ansible_host }}"
+  rules:
+    - address: 127.0.0.1
+      community: public
+      access: rocommunity
+  custom: []
+
+bl_prommox_snmpd_config: "{{ bl_prommox_snmpd_defaults | ansible.builtin.combine(bl_proxmox_snmpd, recursive=true) }}"
