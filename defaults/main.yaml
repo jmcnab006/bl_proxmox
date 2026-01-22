@@ -1,51 +1,29 @@
-# licensed not be default so we set this to false
+# SUBSCRIPTION OR NO
 bl_proxmox_enterprise_license: false
 
-# make the requirement to apply updates false, this would mean that manual flag setting is required for updating a host through
-# the playbook with either the -e oa_proxmox_apply_updates=true or adding it to the group_vars/<group>/vars file
+# APT/UPDATES
 bl_proxmox_apply_updates: false
-
 bl_proxmox_keyring: /usr/share/keyrings/proxmox-archive-keyring.gpg
 
+# PACKAGES
 bl_proxmox_packages_default:
   - openvswitch-switch
   - python3-pexpect
   - snmpd
   - jq
-  -
+
 bl_proxmox_packages_add: []
 bl_proxmox_packages_remove: []
+bl_proxmox_packages_update: false
+bl_proxmox_packages_autostart: false
 
-# setup our hosts file entries
-bl_proxmox_hosts_groups: ["{{ group_names[0] }}"]
-bl_proxmox_hosts_list: []
-# define these variables if you want to create hosts file entries that are not the ansible host
-# a new hostvar can be used instead of the ansible host.
 
-bl_proxmox_ipv4_var: "ansible_host"
-bl_proxmox_ipv6_var: "{{ undef() }}"
-
-# set our default tld
-bl_proxmox_tld: 'bridgelinetech.com'
-
-# if ceph is to be hyperconverged this should be set to true in the group_var
+# CEPH INSTALL
 bl_proxmox_ceph_enabled: false
 bl_proxmox_ceph_repository: 'no-subscription'
 bl_proxmox_ceph_version: 'squid'
 
-# management_gateway should be set in the cluster
-bl_proxmox_management_cidr: ""
-bl_proxmox_management:
-  - name: "{{ ansible_default_ipv4.interface }}"
-    address: "{{ ansible_host }}/24"
-    gateway: "{{ ansible_host | regex_replace('\\.\\d+$', '.1') }}"
-
-      #oa_proxmox_management_interface: "{{ ansible_default_ipv4.interface }}"
-      #oa_proxmox_management_address: "{{ ansible_host }}"
-      #oa_proxmox_management_gateway: "{{ oa_proxmox_management_address | regex_replace('\\.\\d+$', '.1') }}"
-#oa_proxmox_management_cidr: "/24"
-
-# set our last octet to the last octet of the management or ansible host address
+# BUILD OUR HOST ID BASED ON LAST OCTET TO USE FOR PVE ADDRESS OR OTHER USES
 bl_proxmox_host_octet: "{{ ansible_host | split('.') | last }}"
 bl_proxmox_interfaces: []
 # Example:
@@ -73,7 +51,20 @@ bl_proxmox_pve_network: "172.16.0.0"
 bl_proxmox_pve_network_mask: "24"
 bl_proxmox_pve_network_address: "{{ bl_proxmox_pve_network.split('.')[:3] | join('.') }}.{{ bl_proxmox_host_octet }}"
 
-# Cluster configuration
+# HOSTS and DOMAINS
+bl_proxmox_tld: 'bridgelinetech.com'
+bl_proxmox_hosts_domains:
+  - "{{ bl_proxmox_tld }}"
+
+bl_proxmox_hosts_groups: ["{{ group_names[0] }}"]
+bl_proxmox_hosts_list: []
+
+# DEFAULT OUR hostvar to bl_proxmox_pve_network_address or ansible_host
+bl_proxmox_ipv4_var: "{{ bl_proxmox_pve_network_address | default('ansible_host' }}"
+bl_proxmox_ipv6_var: "{{ undef() }}"
+
+
+# CLUSTER configuration
 bl_proxmox_cluster_enabled: false
 bl_proxmox_cluster_join: false
 bl_proxmox_cluster_name: "pve-cluster"
@@ -81,7 +72,7 @@ bl_proxmox_cluster_fingerprint: ""
 bl_proxmox_cluster_master: ""
 bl_proxmox_cluster_nodes: []
 
-# Management and storage routes
+# SPECIAL ROUTING
 bl_proxmox_custom_routes: []
 # Example:
 # oa_proxmox_custom_routes:
@@ -89,24 +80,10 @@ bl_proxmox_custom_routes: []
 #     gateway: "192.168.1.254"
 #     interface: "vmbr1"
 
-# Package updates
-bl_proxmox_update_packages: false
-bl_proxmox_autostart_services: false
-
-# join_cluster should always be false unless set on the command line to add members to the cluster with -e join_cluster=true
-bl_proxmox_join_cluster: false
-
-# not working do not use
-#apply_subnets: false
-
-# do we run the ssh_keys? this should be a manual run really
-#ssh_keys: false
-
-# run_sdn should always be false unless set on the command line to add members to the cluster with -e run_sdn=true
-#run_sdn: false
 
 bl_proxmox_force_reload: false
 
+# LEGACY IMPORTED DONT REMOVE YET
 #oa_snmp_nvme_monitor: false
 
 # set our default cluster options

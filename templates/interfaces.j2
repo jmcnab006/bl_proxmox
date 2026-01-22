@@ -3,7 +3,7 @@
 auto lo
 iface lo inet loopback
 
-{% for iface in bl_proxmox_interfaces %}
+{% for iface in bl_proxmox_network_interfaces %}
 auto {{ iface.name }}
 iface {{ iface.name }} {{ iface.family | default('inet')}} {{ iface.method | default('manual') }}
 {% for key, value in iface.items() %}
