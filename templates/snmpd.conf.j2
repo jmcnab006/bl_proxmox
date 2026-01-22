@@ -5,7 +5,7 @@ sysContact     {{ bl_proxmox_snmpd_config.sys_contact }}
 sysServices    {{ bl_proxmox_snmpd_config.sys_services }}
 
 master agentx
-agentaddress  {{ bl_proxmox_snmpd_config.loopback | join(',') }},{{ bl_proxmox_snmpd_config.listen_addresses | join(',') }}
+agentaddress  {{ ([bl_proxmox_snmpd_config.loopback] + bl_proxmox_snmpd_config.listen_addresses) | join(',') }}
 
 {% for rule in bl_proxmox_snmpd_config.rules  %}
 {{ rule.access }} {{ rule.community }} {{ rule.address }}
