@@ -1,29 +1,29 @@
-  # check if we are a cluster or a cluster member
-  - name: CLUSTER | Check cluster membership
-    ansible.builtin.stat:
-      path: /etc/pve/corosync.conf
-    register: _bl_proxmox_pvecm_status
-    tags:
-      - join
-      - cluster
+# check if we are a cluster or a cluster member
+- name: CLUSTER | Check cluster membership
+  ansible.builtin.stat:
+    path: /etc/pve/corosync.conf
+  register: _bl_proxmox_pvecm_status
+  tags:
+    - join
+    - cluster
 
-  - name: CLUSTER | Set our bl_proxmox_is_cluster to true or false
-    ansible.builtin.set_fact:
-      bl_proxmox_is_cluster: "{% if (_bl_proxmox_pvecm_status.stat.exists ) %}true{% else %}false{% endif %}"
-    tags:
-      - join
-      - cluster
+- name: CLUSTER | Set our bl_proxmox_is_cluster to true or false
+  ansible.builtin.set_fact:
+    bl_proxmox_is_cluster: "{% if (_bl_proxmox_pvecm_status.stat.exists) %}true{% else %}false{% endif %}"
+  tags:
+    - join
+    - cluster
 
-  # join the cluster when we are not a member of a cluster and the environment variable join_cluster=true
-  - name: CLUSTER | Join to cluster
-    ansible.builtin.expect:
-      command: "pvecm add {{ bl_proxmox_cluster_master }} --fingerprint {{ bl_proxmox_cluster_fingerprint }} --link0 {{ bl_proxmox_pve_network_address }}"
-      responses:
-        'Please enter superuser': "{{ vault_ansible_password }}"
-        '(?i)fingerprint': "yes"
-      echo: yes
-    when: not bl_proxmox_is_cluster and bl_proxmox_cluster_join | bool
-    tags:
-      - join
-      - cluster
-    throttle: 1
+# join the cluster when we are not a member of a cluster and the environment variable join_cluster=true
+- name: CLUSTER | Join to cluster
+  ansible.builtin.expect:
+    command: "pvecm add {{ bl_proxmox_cluster_master }} --fingerprint {{ bl_proxmox_cluster_fingerprint }} --link0 {{ bl_proxmox_pve_network_address }}"
+    responses:
+      'Please enter superuser': "{{ vault_ansible_password }}"
+      '(?i)fingerprint': "yes"
+    echo: true
+  when: not bl_proxmox_is_cluster and bl_proxmox_cluster_join | bool
+  tags:
+    - join
+    - cluster
+  throttle: 1

@@ -1,14 +1,6 @@
 # oa_proxmox/tasks/network.yml
 # Configure network interfaces based on variable structure
 
-- name: NETWORK | Create ifupdown configuration
-  template:
-    src: "interfaces.j2"
-    dest: "/etc/network/interfaces"
-    mode: '0644'
-    backup: yes
-  notify: "bl_proxmox reload network"
-
 - name: NETWORK | Set system hostname
   ansible.builtin.hostname:
     name: "{{ inventory_hostname }}"
@@ -18,17 +10,21 @@
     path: /etc/hosts
     regexp: '^{{ inventory_hostname }}\s'
     line: "{{ ansible_host }} {{ inventory_hostname }}"
+    owner: 'root'
+    group: 'root'
+    mode: '644'
     state: absent
-    create: yes
+    create: true
 
 - name: NETWORK | Create ifupdown configuration
-  template:
+  ansible.builtin.template:
     src: "interfaces.j2"
     dest: "/etc/network/interfaces"
-    mode: '0644'
-    backup: yes
-  notify: "bl_proxmox reload network"
-
+    owner: 'root'
+    group: 'root'
+    mode: '644'
+    backup: true
+  notify: "Reload bl_proxmox network"
 
 - name: "Flush handlers to apply network config"
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers

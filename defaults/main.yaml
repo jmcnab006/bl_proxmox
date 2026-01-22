@@ -15,7 +15,7 @@ bl_proxmox_packages_default:
 bl_proxmox_packages_add: []
 bl_proxmox_packages_remove: []
 bl_proxmox_packages_update: false
-bl_proxmox_packages_autostart: false
+# bl_proxmox_packages_autostart: false
 
 
 # CEPH INSTALL
@@ -60,7 +60,7 @@ bl_proxmox_hosts_groups: ["{{ group_names[0] }}"]
 bl_proxmox_hosts_list: []
 
 # DEFAULT OUR hostvar to bl_proxmox_pve_network_address or ansible_host
-bl_proxmox_ipv4_var: "{{ bl_proxmox_pve_network_address | default('ansible_host' }}"
+bl_proxmox_ipv4_var: "{{ bl_proxmox_pve_network_address | default('ansible_host') }}"
 bl_proxmox_ipv6_var: "{{ undef() }}"
 
 
@@ -80,63 +80,4 @@ bl_proxmox_custom_routes: []
 #     gateway: "192.168.1.254"
 #     interface: "vmbr1"
 
-
 bl_proxmox_force_reload: false
-
-# LEGACY IMPORTED DONT REMOVE YET
-#oa_snmp_nvme_monitor: false
-
-# set our default cluster options
-
-# set our cluster "options"
-#cluster_option_tags: ["backup", "critical", "database", "fttx", "gatekeeper", "gis","k8s","proxmox", "ravon", "sniper","template", "testing","usi","utility","web"]
-#cluster_option_crs_ha: "static"
-#cluster_option_crs_ha_rebalance: 1
-#cluster_option_ha_shutdown_policy: "migrate"
-#cluster_option_migration_network: ""
-#cluster_option_migration_type: "secure"
-#cluster_option_tag_style_shape: "dense"
-#cluster_option_tag_style_case_sensitive: 0
-#cluster_option_user_tag: "existing"
-#cluster_option_id_lower: 100
-#cluster_option_id_upper: 1000000
-#
-#
-## set our cluster ad realm for usinternet.com
-#cluster_realm_id: "usinternet.com"
-#cluster_realm_base_dn: "DC=usicorp,DC=usinternet,DC=com"
-#cluster_realm_bind_dn: "CN=_proxmox,OU=service_accounts,DC=usicorp,DC=usinternet,DC=com"
-#cluster_realm_bind_dn_password: "l6+mp{ZAqn$-V9HK0NQz"
-#cluster_realm_case_sensitive: 0
-#cluster_realm_default: 1
-#cluster_realm_domain: "usicorp.usinternet.com"
-#cluster_realm_filter: "(&(objectCategory=person)(objectClass=user)(memberOf:1.2.840.113556.1.4.1941:=CN=proxmox_access,CN=Users,DC=usicorp,DC=usinternet,DC=com)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))"
-#cluster_realm_mode: "ldaps"
-#cluster_realm_port: 636
-#cluster_realm_server1: "216.17.16.100"
-#cluster_realm_server2: "216.17.16.101"
-#cluster_realm_sync_default_options: "remove-vanished=acl;entry,scope=users"
-#cluster_realm_sync_attributes: "email=userPrincipalName"
-#cluster_realm_sync_type: "ad"
-#
-#cluster_roles:
-#  - { roleid: "usi_support", priv: "Datastore.AllocateSpace,Datastore.Audit,Pool.Audit,VM.Audit,VM.Backup,VM.Config.CDROM,VM.Config.Cloudinit,VM.Console,VM.PowerMgmt,VM.Snapshot,VM.Snapshot.Rollback" }
-#  - { roleid: "usi_monitor", priv: "Datastore.Audit,Pool.Audit,VM.Audit,Mapping.Audit,SDN.Audit,Sys.Audit" }
-#
-#cluster_default_pools: ["cluster", "templates", "testing"]
-#cluster_default_groups:
-#  - { name: "usi-admins", members: ["jmcnab@usinternet.com", "jtruitt@usinternet.com", "jkrejci@usinternet.com", "jkrier@usinternet.com", "clubarski@usinternet.com", "rrist@usinternet.com"]}
-#  - { name: "usi-support", members: ["klange@usinternet.com", "tcarter@usinternet.com"]}
-#  - { name: "securence-support", members: ["mmtowa@usinternet.com"]}
-#
-#cluster_default_acl:
-#  - { group: "usi-admins", path: "/", role: "Administrator"}
-#  - { group: "usi-support", path: "/pool", role: "PVEAdmin"}
-#  - { group: "usi-admins", path: "/pool/cluster", role: "Administrator"}
-#
-#cluster_monitor_user: "nagios@pve"
-#cluster_monitor_token: "monitor"
-#cluster_monitor_password: "!u0wUNUIAUvC!mQY0~KJKNdv"
-#
-#cluster_default_ha_groups: ["default", "templates"]
-#

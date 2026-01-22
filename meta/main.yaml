@@ -7,4 +7,4 @@ galaxy_info:
   description: Install and configure baseline utilities and settings on proxmox servers
   company: Bridgeline LLC
   min_ansible_version: "2.8"
-dependencies: [ ]
+dependencies: []

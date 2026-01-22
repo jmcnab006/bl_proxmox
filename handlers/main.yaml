@@ -1,4 +1,5 @@
 ---
-- name: bl_proxmox reload network
-  command: 'ifreload -a'
+- name: Reload bl_proxmox network
+  ansible.builtin.command: 'ifreload -a'
+  changed_when: false
 ...

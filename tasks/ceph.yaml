@@ -1,27 +1,43 @@
   # check if we are a cluster or a cluster member
-  - name: CEPH | Check ceph status
-    ansible.builtin.stat:
-      path: /etc/pve/corosync.conf
-    register: _bl_proxmox_ceph_status
-    tags:
-      - ceph
+- name: CEPH | Check ceph status
+  ansible.builtin.stat:
+    path: /etc/ceph/ceph.conf
+  register: _bl_proxmox_ceph_status
+  tags:
+    - ceph
 
-  - name: CLUSTER | Set our bl_proxmox_is_cluster to true or false
-    ansible.builtin.set_fact:
-      bl_proxmox_has_ceph: "{% if (_bl_proxmox_ceph_status.stat.exists ) %}true{% else %}false{% endif %}"
-    tags:
-      - ceph
+- name: CLUSTER | Set our bl_proxmox_is_cluster to true or false
+  ansible.builtin.set_fact:
+    bl_proxmox_has_ceph: "{% if (_bl_proxmox_ceph_status.stat.exists) %}true{% else %}false{% endif %}"
+  tags:
+    - ceph
 
-  # join the cluster when we are not a member of a cluster and the environment variable join_cluster=true
-  - name: CEPH | Install CEPH to nodes66
-    ansible.builtin.expect:
-      command: "pvecm add {{ bl_proxmox_cluster_master }} --fingerprint {{ bl_proxmox_cluster_fingerprint }} --link0 {{ bl_proxmox_pve_network_address }}"
-      responses:
-        'Please enter superuser': "{{ vault_ansible_password }}"
-        '(?i)fingerprint': "yes"
-      echo: yes
-    when: not bl_proxmox_is_cluster and bl_proxmox_cluster_join | bool
-    tags:
+- name: CLUSTER | Install CEPH Packages
+  ansible.builtin.apt:
+    name:
       - ceph
-      - install
-    throttle: 1
+      - ceph-common
+      - ceph-fuse
+      - ceph-mds
+      - ceph-volume
+      - gdisk
+      - nvme-cli
+    state: present
+  when: not bl_proxmox_has_ceph and bl_proxmox_ceph_enabled | bool
+  tags:
+    - ceph
+
+#  # join the cluster when we are not a member of a cluster and the environment variable join_cluster=true
+#  - name: CEPH | Install CEPH to nodes
+#    ansible.builtin.expect:
+#      command: "pvecm add {{ bl_proxmox_cluster_master }} --fingerprint {{ bl_proxmox_cluster_fingerprint }} --link0 {{ bl_proxmox_pve_network_address }}"
+#      responses:
+#        'Please enter superuser': "{{ vault_ansible_password }}"
+#        '(?i)fingerprint': "yes"
+#      echo: yes
+#    when: not bl_proxmox_has_ceph and bl_proxmox_ceph_enabled | bool
+#    tags:
+#      - ceph
+#      - install
+#    throttle: 1
+#

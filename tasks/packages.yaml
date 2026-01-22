@@ -9,16 +9,33 @@
 - name: PACKAGES | Upgrade existing packages
   ansible.builtin.apt:
     upgrade: dist
-    force_apt_get: yes
+    force_apt_get: true
   tags:
     - update
     - packages
   when:
     - bl_proxmox_apply_updates | bool
 
-- name: PACKAGES | Install server prerequisites
+- name: PACKAGES | Install required packages
   ansible.builtin.apt:
-    name: "{{ bl_proxmox_default_packages }}"
+    name: "{{ bl_proxmox_packages_default }}"
     state: present
   tags:
+    - install
+    - packages
+
+- name: PACKAGES | Install additional packages
+  ansible.builtin.apt:
+    name: "{{ bl_proxmox_packages_add }}"
+    state: present
+  tags:
+    - install
+    - packages
+
+- name: PACKAGES | Remove packages
+  ansible.builtin.apt:
+    name: "{{ bl_proxmox_packages_remove }}"
+    state: absent
+  tags:
+    - remove
     - packages
