@@ -125,10 +125,6 @@ argument_specs:
         default: '{{ bl_proxmox_pve_network_address }}'
         description: 'Default hostvar to use as address for hosts file.'
 
-      bl_proxmox_ipv6_var:
-        type: 'str'
-        description: 'May be undefined'
-
       # Cluster
       bl_proxmox_cluster_enabled:
         type: 'bool'
