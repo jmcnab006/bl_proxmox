@@ -1,4 +1,4 @@
-- name: PACKAGES | Install snmpd packages
+- name: SNMP | Install snmpd packages
   ansible.builtin.apt:
     name: snmpd
     state: present

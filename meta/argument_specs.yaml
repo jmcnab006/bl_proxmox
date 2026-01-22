@@ -153,11 +153,16 @@ argument_specs:
 
       # Routing
       bl_proxmox_custom_routes:
-        type: list
-        elements: dict
+        type: 'list'
+        elements: 'dict'
         default: []
 
       # Misc
       bl_proxmox_force_reload:
         type: bool
         default: false
+      # SNNP
+      bl_proxmox_snmpd:
+        type: 'dict'
+        default: {}
+        description: 'Configuration defaults speficied from the defaults.'

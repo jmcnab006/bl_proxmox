@@ -2,4 +2,10 @@
 - name: Reload bl_proxmox network
   ansible.builtin.command: 'ifreload -a'
   changed_when: false
+
+- name: Restart bl_proxmox snmpd
+  ansible.builtin.service:
+    name: 'snmpd'
+    state: 'restarted'
+
 ...
