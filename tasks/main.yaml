@@ -12,6 +12,12 @@
     - packages
     - proxmox
 
+- name: "Configure hosts file"
+  ansible.builtin.include_tasks: "hosts.yaml"
+  tags:
+    - hosts
+    - proxmox
+
 - name: "Configure network interfaces"
   ansible.builtin.include_tasks: "network.yaml"
   tags:
@@ -19,6 +25,7 @@
     - proxmox
 
 - name: "Configure cluster"
+  when: bl_proxmox_cluster_enabled | bool
   ansible.builtin.include_tasks: "cluster.yaml"
   tags:
     - cluster

@@ -7,17 +7,31 @@ bl_proxmox_apply_updates: false
 
 bl_proxmox_keyring: /usr/share/keyrings/proxmox-archive-keyring.gpg
 
-bl_proxmox_default_packages:
+bl_proxmox_packages_default:
   - openvswitch-switch
   - python3-pexpect
   - snmpd
   - jq
+  -
+bl_proxmox_packages_add: []
+bl_proxmox_packages_remove: []
+
+# setup our hosts file entries
+bl_proxmox_hosts_groups: ["{{ group_names[0] }}"]
+bl_proxmox_hosts_list: []
+# define these variables if you want to create hosts file entries that are not the ansible host
+# a new hostvar can be used instead of the ansible host.
+
+bl_proxmox_ipv4_var: "ansible_host"
+bl_proxmox_ipv6_var: "{{ undef() }}"
 
 # set our default tld
-bl_proxmox_tld: bridgelinetech.com
+bl_proxmox_tld: 'bridgelinetech.com'
 
 # if ceph is to be hyperconverged this should be set to true in the group_var
 bl_proxmox_ceph_enabled: false
+bl_proxmox_ceph_repository: 'no-subscription'
+bl_proxmox_ceph_version: 'squid'
 
 # management_gateway should be set in the cluster
 bl_proxmox_management_cidr: ""
@@ -60,6 +74,8 @@ bl_proxmox_pve_network_mask: "24"
 bl_proxmox_pve_network_address: "{{ bl_proxmox_pve_network.split('.')[:3] | join('.') }}.{{ bl_proxmox_host_octet }}"
 
 # Cluster configuration
+bl_proxmox_cluster_enabled: false
+bl_proxmox_cluster_join: false
 bl_proxmox_cluster_name: "pve-cluster"
 bl_proxmox_cluster_fingerprint: ""
 bl_proxmox_cluster_master: ""

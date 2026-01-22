@@ -18,7 +18,7 @@
     path: /etc/hosts
     regexp: '^{{ inventory_hostname }}\s'
     line: "{{ ansible_host }} {{ inventory_hostname }}"
-    state: present
+    state: absent
     create: yes
 
 - name: NETWORK | Create ifupdown configuration
