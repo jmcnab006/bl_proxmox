@@ -39,7 +39,7 @@
     - proxmox
 
 - name: "Install SNMP"
-  when: bl_proxmox_snmp.enabled | bool
+  when: bl_proxmox_snmpd.enabled | bool
   ansible.builtin.include_tasks: "snmp.yaml"
   tags:
     - snmp
