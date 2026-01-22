@@ -161,8 +161,17 @@ argument_specs:
       bl_proxmox_force_reload:
         type: bool
         default: false
+
       # SNNP
       bl_proxmox_snmpd:
         type: 'dict'
         default: {}
         description: 'Configuration defaults speficied from the defaults.'
+
+      # NTP
+      bl_proxmox_timezone:
+        type: 'str'
+        default: 'America/Chicago'
+      bl_proxmox_timeserver:
+        type: 'str'
+        default: 'pool.ntp.org'

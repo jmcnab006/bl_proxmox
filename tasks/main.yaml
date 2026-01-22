@@ -13,7 +13,6 @@
     - repositories
     - proxmox
 
-
 - name: "Update system packages"
   ansible.builtin.include_tasks: "packages.yaml"
   tags:
