@@ -1,6 +1,6 @@
 # Bridgeline Proxmox role
 
-This role installs and configures network, snmpd, packages, sets the hostname, system time and NTP for a proxmox 9.X host or cluster.
+This role installs and configures network, snmpd, packages, sets the hostname and system time for a proxmox 9.X host or cluster.
 
 ## Requirements
 
